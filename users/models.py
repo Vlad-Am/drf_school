@@ -20,3 +20,9 @@ class User(AbstractUser):
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
         permissions = [("set_is_activated", "Может блокировать пользователя")]
+
+
+# class Pays(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     amount = models.IntegerField()
+#     date = models.DateField()
