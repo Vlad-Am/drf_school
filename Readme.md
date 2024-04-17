@@ -1,3 +1,4 @@
+При работе с проектом необходимо заполнит файл .env переименовав .env.sample, далее:
 # python manage.py makemigrations
 # python manage.py migrate
 # python manage.py csu
