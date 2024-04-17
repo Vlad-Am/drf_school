@@ -1,8 +1,8 @@
 При работе с проектом необходимо заполнит файл .env переименовав .env.sample, далее:
-# python manage.py makemigrations
-# python manage.py migrate
-# python manage.py csu
-# python manage.py pays
+### python manage.py makemigrations
+### python manage.py migrate
+### python manage.py csu
+### python manage.py pays
 
 Для модели курса добавьте в сериализатор поле вывода количества уроков. 
 
