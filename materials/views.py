@@ -12,18 +12,19 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'create':
-            self.permission_classes = (~IsModer,)
+            self.permission_classes = (~IsModer, IsAuthenticated)
 
         elif self.action in ['update', 'retrieve']:
-            self.permission_classes = (IsModer | IsOwner,)
+            self.permission_classes = (IsAuthenticated, IsModer | IsOwner,)
 
         elif self.action == 'destroy':
-            self.permission_classes = (~IsModer | IsOwner,)
+            self.permission_classes = (IsAuthenticated, ~IsModer | IsOwner,)
 
         elif self.action in "list":
-            self.permission_classes = (AllowAny,)
+            self.permission_classes = (IsAuthenticated,)
 
-        return super().get_permissions()
+        return [permission() for permission in self.permission_classes]
+
 
 
 class LessonListAPIView(generics.ListAPIView):
