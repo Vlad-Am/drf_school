@@ -111,10 +111,10 @@ class LessonTestCase(APITestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
-        # self.assertEqual(
-        #     response.json(),
-        #     {'non_field_errors': ['Incorrect YouTube URL']}
-        # )
+        self.assertEqual(
+            response.json(),
+            {'non_field_errors': ['Incorrect YouTube URL']}
+        )
 
 
 class SubscriptionTestCase(APITestCase):
