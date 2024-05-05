@@ -23,7 +23,7 @@ class LessonSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     count_lessons = serializers.SerializerMethodField()
     subject_list = LessonSerializer(source='lesson_set', many=True, read_only=True)
-    course_subscription = serializers.SerializerMethodField()  # поле подписки на курс
+    course_subscription = serializers.SerializerMethodField(read_only=True)  # поле подписки на курс
 
     def get_course_subscription(self, course):
         owner = self.context['request'].user
@@ -41,4 +41,5 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('name', 'description', 'preview', 'count_lessons', 'subject_list', 'owner', 'course_subscription')
+        fields = ('id', 'name', 'description',  'count_lessons', 'subject_list', 'owner',
+                  'course_subscription')
