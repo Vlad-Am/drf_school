@@ -8,7 +8,6 @@ from materials.models import Course, Lesson, Subscription
 from materials.paginators import LessonPaginator
 from materials.serializer import CourseSerializer, LessonSerializer, SubscriptionSerializer
 from materials.tasks import my_send_email
-from users.models import User
 from users.permissions import IsModer, IsOwner
 
 
@@ -22,13 +21,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             self.permission_classes = (~IsModer, IsAuthenticated)
 
-        elif self.action in 'update':
-            self.permission_classes = (IsAuthenticated, IsModer | IsOwner,)
+        # elif self.action in 'update':
+        #     self.permission_classes = (IsAuthenticated, IsModer | IsOwner,)
 
         elif self.action == 'destroy':
             self.permission_classes = (IsAuthenticated, ~IsModer | IsOwner,)
 
-        elif self.action in ("list", 'retrieve', "subscribe"):
+        elif self.action in ("list", 'update', 'retrieve', "subscribe"):
             self.permission_classes = (IsAuthenticated,)
 
         return [permission() for permission in self.permission_classes]
@@ -48,12 +47,16 @@ class CourseViewSet(viewsets.ModelViewSet):
             message = 'подписка оформлена'
             return Response({"message": message})
 
+    # def perform_update(self, serializer):
+    #     course = serializer.save()
+    #     mailing_about_updates.delay(course.pk)
     def update(self, request, *args, **kwargs):
         """ Отправка пользователям имеющим подписку на курс информации об обновлении курса """
         # Список пользователей подписанных на курс
-        recipient_list = Subscription.objects.filter(Course, course_subscription=True)
+        subs_email_list = list(Subscription.objects.filter(course_subscription=kwargs['pk']).values_list('user__email',
+                                                                                                         flat=True))
 
-        my_send_email.delay(recipient_list)
+        my_send_email.delay(subs_email_list)
 
         return super().update(request, *args, **kwargs)
 
@@ -104,4 +107,3 @@ class CoursesSubscriptionViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
     permission_classes = [IsAuthenticated]
     queryset = Subscription.objects.all()
-

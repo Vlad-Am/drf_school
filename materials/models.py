@@ -43,7 +43,9 @@ class Lesson(models.Model):
 class Subscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='пользователь',
                              on_delete=models.CASCADE, **NULLABLE)
-    course_subscription = models.ForeignKey(Course, verbose_name='курс в подписке', on_delete=models.CASCADE)
+    course_subscription = models.ForeignKey(Course, verbose_name='курс в подписке', on_delete=models.CASCADE,
+                                            related_name="subscription", **NULLABLE)
+    is_sub = models.BooleanField(verbose_name="подписка", default=False)
 
     def __str__(self):
         return f'{self.user} - {self.course_subscription}'
