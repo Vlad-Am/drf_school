@@ -1,4 +1,3 @@
-from django.core.mail import send_mail
 from rest_framework import viewsets, generics
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated

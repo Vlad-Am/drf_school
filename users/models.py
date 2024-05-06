@@ -42,5 +42,4 @@ class Pays(models.Model):
         verbose_name_plural = "Оплаты"
 
     def __str__(self):
-        return f"""{self.user} - {self.course} - {self.payment_method} - {self.link} 
-                {self.session_id} - {self.amount}"""
+        return f"""{self.user} - {self.course} - {self.payment_method} - {self.link} -{self.session_id} -"""

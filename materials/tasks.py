@@ -1,14 +1,12 @@
 import smtplib
 from calendar import monthrange
-
 import pytz
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
 from users.models import User
-import json
+
 from datetime import datetime, timedelta
-from django_celery_beat.models import PeriodicTask, PeriodicTasks, IntervalSchedule
 
 
 @shared_task

@@ -19,7 +19,3 @@ class LessonAdmin(admin.ModelAdmin):
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ("course_subscription", "user", 'is_sub',)
     list_filter = ("course_subscription", "user",)
-
-
-
-
