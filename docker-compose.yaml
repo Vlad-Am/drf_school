@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+    stdin_open: true
+    healthcheck:
+      test: ["CMD", "-c", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    tty: true
+    ports:
+      - "8000:8000"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+
+volumes:
+  pg-data:

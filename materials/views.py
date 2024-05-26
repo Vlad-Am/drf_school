@@ -52,7 +52,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         """ Отправка пользователям имеющим подписку на курс информации об обновлении курса """
         # Список пользователей подписанных на курс
-        subs_email_list = list(Subscription.objects.filter(course_subscription=kwargs['pk']).values_list('user__email',
+        subs_email_list = list(Subscription.objects.filter(course_subscription=w['pk']).values_list('user__email',
                                                                                                          flat=True))
 
         my_send_email.delay(subs_email_list)
