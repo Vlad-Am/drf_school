@@ -17,6 +17,12 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:latest
+    restart: on-failure
+    expose:
+      - "6379"
+
   app:
     build: .
     tty: true
@@ -28,6 +34,34 @@ services:
         condition: service_healthy
     volumes:
       - .:/app
+
+  celery:
+    build: .
+    tty: true
+    command: celery -A config worker -l INFO -P eventlet
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - app
+      - db
+    env_file:
+      - .env
+
+  celery-beat:
+    build: .
+    tty: true
+    command: celery -A config beat -l INFO
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - app
+      - db
+    env_file:
+      - .env
 
 volumes:
   pg-data:
